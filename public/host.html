@@ -11,7 +11,7 @@
 
 <section id="lobby" class="view" hidden>
   <div class="card lobby-settings">
-    <h1>Charakter-Auktion</h1>
+    <div class="titlerow"><h1>Charakter-Auktion</h1><button class="btn small" data-open-admin>⚙ Einstellungen</button></div>
     <p class="muted">Gamemaster-Einstellungen</p>
 
     <label class="field">
@@ -19,15 +19,33 @@
       <input type="range" id="cfgPlayers" min="2" max="8" step="1">
     </label>
     <label class="field">
-      <span>Reihen / Runden <b id="outRows">5</b></span>
+      <span>Runden <b id="outRows">5</b></span>
       <input type="range" id="cfgRows" min="5" max="10" step="1">
     </label>
-    <div class="gridsize">Raster: <b id="gridSize">4 × 5</b> <span class="muted">(Spalten = Spieler, Zeilen = Runden)</span></div>
+    <div class="field">
+      <span>Kategorien pro Runde <span class="muted">(umstellen in ⚙ Einstellungen → Spiel)</span></span>
+      <div id="planPreview" class="plan"></div>
+    </div>
+    <div class="gridsize">Raster: <b id="gridSize">4 × 5</b> <span class="muted">(Zeilen = Spieler, Spalten = Runden)</span></div>
 
-    <label class="field">
-      <span>Werte am Glücksrad <span class="muted">(Komma-getrennt, z. B. 0, 50M, 100M, -50M, 1Mrd)</span></span>
-      <textarea id="cfgWheel" rows="2" spellcheck="false"></textarea>
-    </label>
+    <div class="field">
+      <span>Joker pro Spieler <span class="muted">(wie oft jeder Joker eingesetzt werden darf, 0 = aus)</span></span>
+      <div class="jokerUses">
+        <label><span>Weißes Monster</span><input type="number" min="0" max="9" data-juse="monster"></label>
+        <label><span>Sperre</span><input type="number" min="0" max="9" data-juse="block"></label>
+        <label><span>Tausch</span><input type="number" min="0" max="9" data-juse="swap"></label>
+        <label><span>Spicken</span><input type="number" min="0" max="9" data-juse="peek"></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <span>Rundengeld <span class="muted">(nach jeder Runde außer der letzten bekommt jeder Spieler zufällig einen Betrag zwischen Minimum und Maximum, in ganzen Mio)</span></span>
+      <div class="payoutRange">
+        <label><span>Minimum (Mio)</span><input type="number" step="1" id="cfgPayoutMin"></label>
+        <span class="dash">–</span>
+        <label><span>Maximum (Mio)</span><input type="number" step="1" id="cfgPayoutMax"></label>
+      </div>
+    </div>
 
     <div class="field">
       <span>Hintergrund</span>
@@ -35,6 +53,15 @@
         <input type="color" id="cfgColor" title="Hintergrundfarbe">
         <label class="btn small">Bild wählen <input type="file" id="cfgBg" accept="image/*" hidden></label>
         <button class="btn small ghost" id="bgClear">Bild entfernen</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <span>Hintergrundmusik <span class="muted">(läuft am TV · Dateien in den Ordner <code>music/</code> legen, dann „Ordner neu einlesen“)</span></span>
+      <div class="bgrow">
+        <select id="cfgMusic" class="music-select"></select>
+        <button class="btn small musicToggle" data-music-toggle hidden></button>
+        <input type="range" id="cfgVolume" min="0" max="1" step="0.05" title="Lautstärke">
       </div>
     </div>
 
@@ -47,6 +74,10 @@
     <h2>Mit dem Handy beitreten</h2>
     <img id="qr" src="/api/qr" alt="QR-Code zum Beitreten">
     <div class="joinurl" id="joinUrl"></div>
+    <div class="tunnel">
+      <div id="tunnelStatus" class="muted"></div>
+      <button class="btn small" id="tunnelBtn">Internet-Zugang (ngrok) einschalten</button>
+    </div>
     <h3>Spieler <span id="lobbyCount"></span></h3>
     <div id="lobbyPlayers" class="lobby-players"></div>
   </div>
@@ -62,28 +93,35 @@
   <footer id="gmbar"></footer>
 </section>
 
-<div id="wheelOverlay" hidden>
-  <div class="wheels">
-    <div class="wheelBox">
-      <h2>Wer ist dran?</h2>
-      <div class="wheelWrap"><canvas id="wheelPlayers" width="460" height="460"></canvas><div class="pointer"></div></div>
-      <button class="btn primary" id="spinPlayerBtn">Spieler-Rad drehen</button>
-    </div>
-    <div class="wheelBox">
-      <h2>Wie viel gibt's?</h2>
-      <div class="wheelWrap"><canvas id="wheelValues" width="460" height="460"></canvas><div class="pointer"></div></div>
-      <button class="btn primary" id="spinValueBtn">Wert-Rad drehen</button>
-    </div>
-  </div>
-  <div id="wheelStatus"></div>
-  <div id="wheelResults"></div>
-  <button class="btn big" id="nextRoundBtn">Nächste Runde</button>
+<div id="roundIntro" hidden>
+  <div class="ri-round" id="riRound"></div>
+  <div class="ri-label">Kategorie</div>
+  <div class="ri-cat" id="riCat"></div>
 </div>
+
+<div id="payoutOverlay" hidden>
+  <h1 id="payoutTitle"></h1>
+  <div id="payoutCards"></div>
+  <button class="btn primary big" id="nextRoundBtn"></button>
+</div>
+
+<div id="wheelOverlay" hidden>
+  <h1 id="cwTitle"></h1>
+  <div class="wheelWrap big"><canvas id="wheelCustom" width="620" height="620"></canvas><div class="pointer"></div></div>
+  <div id="cwResult"></div>
+  <div class="cwBtns">
+    <button class="btn primary big" id="cwSpin">Drehen</button>
+    <button class="btn" id="cwClose">Schließen</button>
+  </div>
+</div>
+
+<button id="musicUnlock" class="btn primary" hidden>♪ Musik starten</button>
 
 <div id="fatal" hidden></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/common.js"></script>
+<script src="/music.js"></script>
 <script src="/host.js"></script>
 </body>
 </html>

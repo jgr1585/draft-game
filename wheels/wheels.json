@@ -1,0 +1,32 @@
+{
+  "wheels": [
+    {
+      "id": "wer",
+      "name": "Wer ist dran?",
+      "segments": "players",
+      "durationMs": 5000
+    },
+    {
+      "id": "bonus",
+      "name": "Bonusrad",
+      "segments": [
+        "+50 Mio",
+        "Nichts",
+        "+100 Mio",
+        "Joker zurück",
+        "-50 Mio",
+        "Charakter tauschen"
+      ],
+      "durationMs": 6000
+    },
+    {
+      "id": "dedc0e3513",
+      "name": "Neues Rad",
+      "segments": [
+        "Feld 1",
+        "Feld 2"
+      ],
+      "durationMs": 5000
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Charakter-Auktion · Gamemaster</title>
+<link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<header id="top">
+  <div id="status"></div>
+  <div id="quick"></div>
+</header>
+
+<nav id="tabs">
+  <button data-tab="game">Spiel</button>
+  <button data-tab="queue">Stapel</button>
+  <button data-tab="players">Spieler</button>
+  <button data-tab="grid">Raster</button>
+  <button data-tab="wheels">Glücksräder</button>
+  <button data-tab="settings">Einstellungen</button>
+</nav>
+
+<main>
+  <section id="tab-game" class="tab"></section>
+  <section id="tab-queue" class="tab"></section>
+  <section id="tab-players" class="tab"></section>
+  <section id="tab-grid" class="tab"></section>
+  <section id="tab-wheels" class="tab"></section>
+  <section id="tab-settings" class="tab"></section>
+</main>
+
+<div id="fatal" hidden></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/common.js"></script>
+<script src="/admin.js"></script>
+</body>
+</html>

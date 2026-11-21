@@ -14,6 +14,14 @@ function esc(s) {
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
+// Nach einem Update (neuer Server mit geänderten Dateien) die Seite neu laden
+let seenBuild = null;
+function checkBuild(state) {
+  if (!state || !state.build) return;
+  if (seenBuild && state.build !== seenBuild) location.reload();
+  seenBuild = state.build;
+}
+
 function emit(socket, event, payload) {
   return new Promise((resolve) => socket.emit(event, payload || {}, (res) => resolve(res || { ok: false, error: 'Keine Antwort' })));
 }

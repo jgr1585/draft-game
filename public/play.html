@@ -9,14 +9,19 @@
 </head>
 <body>
 
+<div id="wheelBanner" hidden></div>
+
 <section id="joinView" hidden>
   <h1>Charakter-Auktion</h1>
   <form id="joinForm">
-    <label class="photo">
+    <label class="photo" for="galleryInput">
       <img id="photoPreview" alt="" hidden>
-      <span id="photoHint">Foto antippen</span>
-      <input type="file" id="photoInput" accept="image/*" capture="user" hidden>
+      <span id="photoHint">Profilbild<br>(optional)</span>
     </label>
+    <div class="photoBtns">
+      <label class="btn small">🖼 Aus Galerie<input type="file" id="galleryInput" class="photoInput" accept="image/*" hidden></label>
+      <label class="btn small">📷 Kamera<input type="file" id="cameraInput" class="photoInput" accept="image/*" capture="user" hidden></label>
+    </div>
     <input id="nameInput" maxlength="20" placeholder="Dein Name" autocomplete="nickname" required>
     <button class="btn primary big" type="submit">Beitreten</button>
   </form>
@@ -35,6 +40,7 @@
 
 <section id="gameView" hidden>
   <header class="me" id="meHeader"></header>
+  <div id="tradeBox" hidden></div>
   <div id="phaseBox"></div>
 
   <div id="bidBox" class="panel" hidden>
@@ -59,6 +65,8 @@
   <div id="jokerBox" class="panel"></div>
   <div id="myGrid" class="panel"></div>
 </section>
+
+<div id="peekModal" hidden></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/common.js"></script>

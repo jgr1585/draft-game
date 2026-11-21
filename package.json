@@ -8,10 +8,12 @@
   },
   "scripts": {
     "start": "node server.js",
+    "online": "node server.js --ngrok",
     "test": "node test/run-test.js"
   },
   "license": "ISC",
   "dependencies": {
+    "@ngrok/ngrok": "^1.8.0",
     "express": "^4.22.3",
     "qrcode": "^1.5.4",
     "socket.io": "^4.8.4"
