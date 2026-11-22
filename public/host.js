@@ -66,6 +66,7 @@ function renderLobby() {
   setIfIdle($('#cfgPlayers'), c.maxPlayers);
   setIfIdle($('#cfgRows'), c.rows);
   setIfIdle($('#cfgColor'), c.bgColor);
+  setIfIdle($('#cfgMinRaise'), c.minRaise);
   setIfIdle($('#cfgPayoutMin'), c.payoutMin);
   setIfIdle($('#cfgPayoutMax'), c.payoutMax);
   $('#outPlayers').textContent = c.maxPlayers;
@@ -139,9 +140,9 @@ $('#cfgRows').addEventListener('input', (e) => {
   clearTimeout(cfgTimer);
   cfgTimer = setTimeout(() => act('host:config', { rows: +e.target.value }), 200);
 });
-[['#cfgPayoutMin', 'payoutMin'], ['#cfgPayoutMax', 'payoutMax']].forEach(([sel, key]) => $(sel).addEventListener('change', async (e) => {
+[['#cfgMinRaise', 'minRaise'], ['#cfgPayoutMin', 'payoutMin'], ['#cfgPayoutMax', 'payoutMax']].forEach(([sel, key]) => $(sel).addEventListener('change', async (e) => {
   const r = await act('host:config', { [key]: Number(e.target.value) });
-  if (r.ok) toast('Rundengeld gespeichert', 'ok');
+  if (r.ok) toast('Gespeichert', 'ok');
   else e.target.value = S.config[key];
 }));
 document.querySelectorAll('[data-juse]').forEach((el) => el.addEventListener('change', async () => {
@@ -306,7 +307,7 @@ function renderGame() {
       <div class="spot-name">${c.revealed ? esc(ch.name) : '<span class="muted">Verdeckter Charakter</span>'}</div>
       <div class="kv"><span class="muted">Startwert</span><b>${fmt(ch.value)}</b></div>
       ${top ? `
-        <div class="bidder">${avatarHtml(top)}<div><div class="muted">Höchstgebot · ${esc(top.name)}</div><div class="amt">${fmt(c.highest.amount)}</div></div></div>`
+        <div class="bidder">${avatarHtml(top)}<div><div class="muted">Höchstgebot · ${esc(top.name)}</div><div class="amt">${fmt(c.highest.amount)}</div><div class="nextbid">Nächstes Gebot ab ${fmt(c.highest.amount + S.config.minRaise * 1e6)}</div></div></div>`
       : `<div class="bidder"><div class="muted">${c.revealed ? 'Noch kein Gebot – jetzt am Handy bieten!' : 'Vorab-Gebote am Handy – Monster-Joker nur jetzt!'}</div></div>`}
       <div class="minirow">
         <span>Skippen: ${c.skips.length} / ${c.skipNeeded} nötig</span>

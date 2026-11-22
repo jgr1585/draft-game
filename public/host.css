@@ -49,6 +49,8 @@ textarea { font: 15px/1.4 ui-monospace, Consolas, monospace; color: var(--text);
 .jokerUses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .jokerUses label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
 .jokerUses input { font: inherit; font-size: 18px; color: var(--text); background: var(--card-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; width: 100%; }
+.nextbid { font-size: 13px; color: var(--muted); }
+.numIn { font: inherit; font-size: 18px; color: var(--text); background: var(--card-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; width: 140px; }
 .payoutRange { display: flex; gap: 10px; align-items: flex-end; }
 .payoutRange label { flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
 .payoutRange input { font: inherit; font-size: 18px; color: var(--text); background: var(--card-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; width: 100%; }

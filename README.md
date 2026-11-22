@@ -54,7 +54,7 @@ Neben der Auswahl gibt es **⏸ Stopp / ▶ Abspielen** (Lobby, Gamemaster-Leist
 | Spieler | Geld setzen (`750M`, `1,2Mrd`) oder ±10/50/100 Mio, Joker-Einsätze mit − / + ändern, umbenennen |
 | Raster | Feld anklicken: Charakter entfernen (mit/ohne Geld zurück), beliebigen Charakter mit Preis setzen oder mit einem beliebigen anderen Feld **tauschen, ohne dass die Spieler zustimmen müssen** (auch über Runden hinweg) |
 | Glücksräder | Räder anlegen, bearbeiten, speichern und jederzeit **anzeigen und drehen** (auch in der Lobby) |
-| Einstellungen | Rundengeld (Min/Max in Mio), Musik, Hintergrundfarbe, Spieler/Runden (nur Lobby), ngrok, Neustart |
+| Einstellungen | Mindest-Erhöhung, Rundengeld (Min/Max in Mio), Musik, Hintergrundfarbe, Spieler/Runden (nur Lobby), ngrok, Neustart |
 
 Oben im Fenster sind immer die wichtigsten Knöpfe (Aufdecken, Zuschlag, Skippen, Gebote zurücksetzen, Weiter).
 
@@ -114,7 +114,7 @@ Die mitgelieferten Bilder sind nur Platzhalter. Einfach löschen und durch eigen
 5. **Auktion:** Ein Charakter nach dem anderen wird versteigert.
    - Jeder Charakter kommt **verdeckt**: Zu sehen sind nur Startwert und Kategorie. Schon jetzt darf vorab geboten werden.
    - Der Gamemaster drückt **Charakter aufdecken**, dann sieht man Name und Bild. **Aussteigen** geht schon vorher. Steigen alle aus, ohne dass jemand geboten hat, kommt sofort der nächste Charakter. Der **Zuschlag** passiert erst nach dem Aufdecken.
-   - Das erste Gebot muss mindestens dem Startwert entsprechen, jedes weitere muss höher sein. Niemand kann mehr bieten, als er hat.
+   - Das erste Gebot muss mindestens dem Startwert entsprechen, jedes weitere muss das Höchstgebot um mindestens die **Mindest-Erhöhung** übersteigen (Standard 5 Mio, ganze Mio; einstellbar in der Lobby und jederzeit im Spiel unter ⚙ Einstellungen → Einstellungen). Niemand kann mehr bieten, als er hat.
    - **Aussteigen** gilt für den aktuellen Charakter. Bleibt nur noch der Höchstbietende übrig, bekommt er den Charakter automatisch (oder der Gamemaster drückt **Zuschlag**).
    - **Skippen** geht jederzeit, auch solange der Charakter noch verdeckt ist. Bei Mehrheit kommt er zurück auf den Stapel.
    - Wer in der aktuellen Runde schon einen Charakter hat, bietet in dieser Runde nicht mehr mit.

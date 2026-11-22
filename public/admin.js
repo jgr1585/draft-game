@@ -573,6 +573,7 @@ function renderSettingsTab(el) {
           <div class="cols3">${Object.entries(JOKERS).map(([k, label]) => `<label class="field"><span class="small">${label}</span><input type="number" min="0" max="9" data-juse="${k}" value="${c.jokerUses[k]}" ${lobby ? '' : 'disabled'}></label>`).join('')}</div></div>
         <label class="field"><span>Spieler (max.) ${lobby ? '' : '<small class="muted">nur in der Lobby</small>'}</span><input type="number" id="sPlayers" min="${S.rules.minPlayers}" max="${S.rules.maxPlayers}" value="${c.maxPlayers}" ${lobby ? '' : 'disabled'}></label>
         <label class="field"><span>Runden ${lobby ? '' : '<small class="muted">nur in der Lobby</small>'}</span><input type="number" id="sRows" min="${S.rules.minRows}" max="${S.rules.maxRows}" value="${c.rows}" ${lobby ? '' : 'disabled'}></label>
+        <label class="field"><span>Mindest-Erhöhung (Mio) <small class="muted">– um so viel muss ein Gebot das Höchstgebot mindestens übersteigen, jederzeit änderbar</small></span><input type="number" min="1" max="1000" step="1" id="sMinRaise" value="${c.minRaise}"></label>
         <div class="field"><span>Rundengeld <small class="muted">– zufällig zwischen Minimum und Maximum, in ganzen Mio (nach der letzten Runde gibt's keins)</small></span>
           <div class="row"><label class="field"><span class="small">Minimum (Mio)</span><input type="number" step="1" id="sPayoutMin" value="${c.payoutMin}"></label>
           <label class="field"><span class="small">Maximum (Mio)</span><input type="number" step="1" id="sPayoutMax" value="${c.payoutMax}"></label></div></div>
@@ -601,6 +602,7 @@ $('#tab-settings').addEventListener('change', (e) => {
   const id = e.target.id;
   if (id === 'sPlayers') act('host:config', { maxPlayers: Number(e.target.value) }, 'Gespeichert');
   if (id === 'sRows') act('host:config', { rows: Number(e.target.value) }, 'Gespeichert');
+  if (id === 'sMinRaise') act('host:config', { minRaise: Number(e.target.value) }, 'Mindest-Erhöhung gespeichert');
   if (id === 'sPayoutMin') act('host:config', { payoutMin: Number(e.target.value) }, 'Rundengeld gespeichert');
   if (id === 'sPayoutMax') act('host:config', { payoutMax: Number(e.target.value) }, 'Rundengeld gespeichert');
   if (id === 'sMusic') act('host:config', { music: { track: e.target.value } });

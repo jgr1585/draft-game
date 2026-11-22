@@ -248,6 +248,7 @@ const musicTracks = () => musicFiles;
 const config = {
   maxPlayers: 4,
   rows: 5,
+  minRaise: 5,             // Mindest-Erhöhung beim Überbieten (ganze Mio)
   payoutMin: 0,            // Rundengeld: zufällige ganze Mio zwischen min und max
   payoutMax: 300,
   bgColor: '#141633',
@@ -433,6 +434,9 @@ function award() {
 }
 
 // Prüft nach jeder Aktion, ob die Auktion entschieden ist
+// Nächstes erlaubtes Gebot: Startwert bzw. Höchstgebot + Mindest-Erhöhung
+const minNextBid = (c) => (c.highest ? c.highest.amount + config.minRaise * MIO : charMap.get(c.charId).value);
+
 function resolveIfDone() {
   const c = game.current;
   if (!c || game.phase !== 'auction') return;
@@ -444,7 +448,7 @@ function resolveIfDone() {
   // Zugeschlagen wird erst nach dem Aufdecken
   if (c.revealed && c.highest) {
     // Wer nicht mehr überbieten kann, zählt nicht mehr als Gegner
-    const rivals = active.filter((id) => id !== c.highest.playerId && getPlayer(id).money > c.highest.amount);
+    const rivals = active.filter((id) => id !== c.highest.playerId && getPlayer(id).money >= minNextBid(c));
     if (rivals.length === 0) return award();
   }
 
@@ -826,7 +830,7 @@ io.on('connection', (socket) => {
     if (c.withdrawn.includes(p.id)) fail('Du bist bei diesem Charakter schon ausgestiegen.');
     if (c.highest?.playerId === p.id) fail('Du bist schon Höchstbietender.');
     if (amount < ch.value) fail(`Mindestens ${fmt(ch.value)} (Startwert).`);
-    if (c.highest && amount <= c.highest.amount) fail(`Du musst mehr als ${fmt(c.highest.amount)} bieten.`);
+    if (c.highest && amount < minNextBid(c)) fail(`Mindestens ${fmt(minNextBid(c))} (Höchstgebot + ${fmt(config.minRaise * MIO)}).`);
     if (amount > p.money) fail('So viel Kohle hast du nicht.');
     c.highest = { playerId: p.id, amount };
     c.skips = c.skips.filter((id) => id !== p.id);
@@ -943,7 +947,7 @@ io.on('connection', (socket) => {
     socket.data.host = true;
   });
 
-  on('host:config', ({ maxPlayers, rows, payoutMin, payoutMax, bgColor, music, jokerUses }) => {
+  on('host:config', ({ maxPlayers, rows, minRaise, payoutMin, payoutMax, bgColor, music, jokerUses }) => {
     host();
     if (jokerUses !== undefined) {
       if (game.phase !== 'lobby') fail('Joker-Einsätze nur in der Lobby einstellbar (im Spiel: Einstellungen → Spieler).');
@@ -983,6 +987,13 @@ io.on('connection', (socket) => {
         config.rows = n;
         config.categoryPlan = normalizePlan(config.categoryPlan, n);
       }
+    }
+    if (minRaise !== undefined) {
+      const n = Number(minRaise);
+      if (!Number.isInteger(n) || n < 1 || n > 1000) fail('Mindest-Erhöhung: ganze Zahl von 1 bis 1000 Mio.');
+      config.minRaise = n;
+      log(`Mindest-Erhöhung beim Überbieten: ${fmt(n * MIO)}`);
+      resolveIfDone();   // kann jetzt niemand mehr überbieten, gibt's den Zuschlag
     }
     if (payoutMin !== undefined || payoutMax !== undefined) {
       const lo = payoutMin !== undefined ? Number(payoutMin) : config.payoutMin;

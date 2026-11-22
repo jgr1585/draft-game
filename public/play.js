@@ -104,7 +104,7 @@ function renderGame(p) {
   if (S.phase === 'auction' && c) {
     const ch = c.char;
     const top = c.highest && byId[c.highest.playerId];
-    const minNext = c.highest ? c.highest.amount + 1e6 : ch.value;
+    const minNext = c.highest ? c.highest.amount + S.config.minRaise * 1e6 : ch.value;
     let status, statusCls = '';
     let canBid = false;
 
@@ -117,7 +117,7 @@ function renderGame(p) {
       if (!c.revealed) status = '<b>Verdeckt!</b> Du kannst schon vorab bieten. ';
       else status = '';
       status += top
-        ? `Höchstgebot: <b>${fmt(c.highest.amount)}</b> von ${esc(top.name)}`
+        ? `Höchstgebot: <b>${fmt(c.highest.amount)}</b> von ${esc(top.name)}<br><span class="muted">Nächstes Gebot ab ${fmt(minNext)} (mind. +${fmt(S.config.minRaise * 1e6)})</span>`
         : `Noch kein Gebot · Mindestens <b>${fmt(ch.value)}</b>`;
       if (minNext > p.money) { status += '<br>Du hast nicht genug Kohle zum Überbieten.'; statusCls = 'warn'; }
     }
@@ -324,7 +324,7 @@ $('#bidBox').addEventListener('click', (e) => {
   const q = e.target.closest('[data-q]')?.dataset.q;
   if (!q) return;
   const p = me(), c = S.current;
-  const minNext = c.highest ? c.highest.amount + 1e6 : c.char.value;
+  const minNext = c.highest ? c.highest.amount + S.config.minRaise * 1e6 : c.char.value;
   const input = $('#bidInput');
   const cur = Math.max(Math.round(parseFloat(input.value) * 1e6) || 0, minNext);
   let val = cur;
