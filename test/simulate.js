@@ -319,6 +319,16 @@ let state;
     }
   }
   assert.equal(state.phase, 'finished');
+  // Nach dem Spiel: Tausch-Joker geht noch, alles andere nicht
+  assert(!(await emit(P(0).s, 'joker', { type: 'monster' })).ok, 'no monster after the game');
+  {
+    const mine = state.grid[4][state.players[0].column].charId, theirs = state.grid[4][state.players[1].column].charId;
+    assert((await emit(P(0).s, 'joker', { type: 'swap', targetId: P(1).id, row: 4 })).ok, 'swap offer after the game'); await sleep(20);
+    assert((await emit(P(1).s, 'trade:respond', { id: state.trades[0].id, accept: true })).ok); await sleep(20);
+    assert.equal(state.grid[4][state.players[0].column].charId, theirs, 'swapped after the game');
+    assert.equal(state.grid[4][state.players[1].column].charId, mine);
+    assert.equal(state.players[0].jokers.swap, 0);
+  }
   assert.equal(payouts, 4, 'one payout per round except the last');
   assert.equal(state.payout, null, 'no payout at the end');
   assert(swapTested, 'swap tested');

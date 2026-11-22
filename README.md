@@ -130,7 +130,7 @@ Wie oft jeder Spieler jeden Joker einsetzen darf, stellt der Gamemaster in der L
 |---|---|
 | Weißes Monster | +100 Mio Guthaben, nur solange der aktuelle Charakter noch verdeckt ist (Vorab-Joker) |
 | Sperre | Ein Spieler darf beim aktuellen Charakter nicht mitbieten – nur bis zum ersten Gebot auf den Charakter (vorher, auch verdeckt, geht's) |
-| Tausch | Du **bietest** einem anderen Spieler einen Tausch in einer Runde an (beide brauchen dort einen Charakter). Er bekommt das Angebot aufs Handy und kann **annehmen oder ablehnen**, du kannst es zurückziehen. Der Joker ist erst weg, wenn der Tausch angenommen wird. Pro Spieler ist ein offenes Angebot möglich. |
+| Tausch | Du **bietest** einem anderen Spieler einen Tausch in einer Runde an (beide brauchen dort einen Charakter). Er bekommt das Angebot aufs Handy und kann **annehmen oder ablehnen**, du kannst es zurückziehen. Der Joker ist erst weg, wenn der Tausch angenommen wird. Pro Spieler ist ein offenes Angebot möglich. Geht auch noch **nach dem Spiel** (die anderen Joker nicht). |
 | Spicken | Du wählst eine **Position im Stapel dieser Runde** (Nr. 1 = der gerade verdeckte Charakter bzw. der nächste) und siehst heimlich, welcher Charakter dort liegt. Nur dein Handy zeigt das Ergebnis, im Verlauf steht nur „X spickt auf Position N“. Die Reihenfolge kann sich danach noch ändern (Skippen, Gamemaster). |
 
 ### Gamemaster-Knöpfe im Spiel

@@ -854,7 +854,10 @@ io.on('connection', (socket) => {
 
   on('joker', ({ type, targetId, row, position }) => {
     const p = me();
-    if (!['prepare', 'auction', 'payout'].includes(game.phase)) fail('Joker gehen nur während des Spiels.');
+    const finished = game.phase === 'finished';
+    if (!['prepare', 'auction', 'payout'].includes(game.phase) && !(finished && type === 'swap')) {
+      fail(finished ? 'Nach dem Spiel geht nur noch der Tausch-Joker.' : 'Joker gehen nur während des Spiels.');
+    }
     if (!JOKER_TYPES.includes(type)) fail('Unbekannter Joker.');
     if (!(p.jokers[type] > 0)) fail(`Du hast keinen ${JOKER_NAMES[type]}-Joker mehr.`);
 

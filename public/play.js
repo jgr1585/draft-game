@@ -170,7 +170,7 @@ function renderGame(p) {
     renderMyGrid(p);
     return;
   } else if (S.phase === 'finished') {
-    box.innerHTML = `<div class="panel center"><h2>Raster voll!</h2><div class="muted">Jetzt wird diskutiert, wer gewonnen hat.</div></div>`;
+    box.innerHTML = `<div class="panel center"><h2>Raster voll!</h2><div class="muted">Jetzt wird diskutiert, wer gewonnen hat.${p.jokers.swap > 0 ? '<br>Deinen Tausch-Joker kannst du noch einsetzen.' : ''}</div></div>`;
   }
 
   renderTrades(p);
@@ -183,8 +183,8 @@ const toMio = (n) => +(n / 1e6).toFixed(1);
 // ---------------------------------------------------------------------------
 function renderJokers(p, byId) {
   const box = $('#jokerBox');
-  if (S.phase === 'finished') { box.hidden = true; return; }
-  box.hidden = false;
+  const fin = S.phase === 'finished';   // nach dem Spiel geht nur noch Tausch
+  if (fin && jokerOpen && jokerOpen !== 'swap') jokerOpen = null;
   const c = S.current;
   const inAuction = S.phase === 'auction' && c;
 
@@ -238,10 +238,17 @@ function renderJokers(p, byId) {
     <div class="peekrow"><img src="${esc(k.image)}" alt=""><span><b>${esc(k.name)}</b> <span class="cat">${esc(k.category)}</span><br>
       <span class="muted small">Runde ${k.round + 1} · Position ${k.position} (zu dem Zeitpunkt) · ${fmt(k.value)}</span></span></div>`).join('')}</div>` : '';
 
+  const swapCard = card('swap', 'Tausch', myOffer ? 'Du wartest noch auf eine Antwort' : `Tausch in derselben Runde anbieten – der andere muss zustimmen${fin ? ' · geht auch nach dem Spiel' : ''}`, swapRows.length > 0 && !myOffer, swapPicker);
+  if (fin) {
+    box.hidden = !swapCard;
+    box.innerHTML = swapCard ? `<h3>Joker</h3>${swapCard}` : '';
+    return;
+  }
+  box.hidden = false;
   box.innerHTML = `<h3>Joker</h3>` +
     card('monster', 'Weißes Monster', `+${fmt(S.rules.monsterBonus)} · nur solange der Charakter verdeckt ist`, inAuction && !c.revealed) +
     card('block', 'Sperre', inAuction && c.highest ? 'Geht nicht mehr – es wurde schon geboten' : 'Einen Spieler für diesen Charakter sperren · nur vor dem ersten Gebot', blockTargets.length > 0, blockPicker) +
-    card('swap', 'Tausch', myOffer ? 'Du wartest noch auf eine Antwort' : 'Tausch in derselben Runde anbieten – der andere muss zustimmen', swapRows.length > 0 && !myOffer, swapPicker) +
+    swapCard +
     card('peek', 'Spicken', 'Heimlich einen Charakter dieser Runde ansehen – du wählst die Position', peekCount > 0, peekPicker) +
     peekList;
 }
